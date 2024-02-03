@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>;
-const Statistics = ({value, count, pos}) => <p>{value}: {count} {pos}</p>
+const Statistics = ({value, count, per}) => <p>{value}: {count} {per}</p>
 
 const App = () => {
 	const [good, setGood] = useState(0);
@@ -22,7 +22,7 @@ const App = () => {
       <Statistics value="neutral" count={neutral}/>
       <Statistics value="bad" count={bad}/>
       <Statistics value="avarage" count={avarage().toFixed(2)}/>
-      <Statistics value="positive" count={positive().toFixed(2)} pos="%"/>
+      <Statistics value="positive" count={positive().toFixed(2)} per="%"/>
 		</div>
 	);
 };
