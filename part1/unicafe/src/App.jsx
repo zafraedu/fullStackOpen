@@ -1,21 +1,21 @@
 import { useState } from "react";
 
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>;
-const Statistics = ({ value, count, per }) => (
+const StatisticLine = ({ text, value, per }) => (
 	<p>
-		{value}: {count} {per}
+		{text}: {value} {per}
 	</p>
 );
 
-const AllStatistics = ({ good, bad, neutral, avarage, positive }) => {
+const Statistics = ({ good, bad, neutral, avarage, positive }) => {
 	if (good + bad + neutral > 0) {
 		return (
 			<>
-				<Statistics value="good" count={good} />
-				<Statistics value="neutral" count={neutral} />
-				<Statistics value="bad" count={bad} />
-				<Statistics value="avarage" count={avarage} />
-				<Statistics value="positive" count={positive} per="%" />
+				<StatisticLine text="good" value={good} />
+				<StatisticLine text="neutral" value={neutral} />
+				<StatisticLine text="bad" value={bad} />
+				<StatisticLine text="avarage" value={avarage} />
+				<StatisticLine text="positive" value={positive} per="%" />
 			</>
 		);
 	} else {
@@ -38,7 +38,7 @@ const App = () => {
 			<Button onClick={() => setNeutral(neutral + 1)} text="neutral" />
 			<Button onClick={() => setBad(bad + 1)} text="bad" />
 			<h2>statistics</h2>
-			<AllStatistics
+			<Statistics
 				good={good}
 				bad={bad}
 				neutral={neutral}
