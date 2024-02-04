@@ -1,6 +1,7 @@
 import { useState } from "react";
-
+/*############ Components ################## */
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>;
+
 const StatisticLine = ({ text, value }) => {
 	if (text === "positive") {
 		return (
@@ -9,56 +10,51 @@ const StatisticLine = ({ text, value }) => {
 				<td>{value}%</td>
 			</tr>
 		);
-	} else {
-		return (
-			<tr>
-				<td>{text}:</td>
-				<td>{value}</td>
-			</tr>
-		);
 	}
+	return (
+		<tr>
+			<td>{text}:</td>
+			<td>{value}</td>
+		</tr>
+	);
 };
 
-const Statistics = ({ good, bad, neutral, avarage, positive }) => {
-	if (good + bad + neutral > 0) {
+const Statistics = ({ clicks }) => {
+	const total = clicks.good + clicks.neutral + clicks.bad;
+	const avarage = total / 3;
+	const positive = clicks.good === 0 ? 0 : (clicks.good / total) * 100;
+
+	if (clicks.good + clicks.bad + clicks.neutral > 0) {
 		return (
 			<table>
 				<tbody>
-					<StatisticLine text="good" value={good} />
-					<StatisticLine text="neutral" value={neutral} />
-					<StatisticLine text="bad" value={bad} />
+					<StatisticLine text="good" value={clicks.good} />
+					<StatisticLine text="neutral" value={clicks.neutral} />
+					<StatisticLine text="bad" value={clicks.bad} />
 					<StatisticLine text="avarage" value={avarage} />
 					<StatisticLine text="positive" value={positive} />
 				</tbody>
 			</table>
 		);
-	} else {
-		return <h4>No feedback given</h4>;
 	}
+	return <h4>No feedback given</h4>;
 };
 
 const App = () => {
-	const [good, setGood] = useState(0);
-	const [neutral, setNeutral] = useState(0);
-	const [bad, setBad] = useState(0);
-
-	const avarage = () => (good + neutral + bad) / 3;
-	const positive = () => (good === 0 ? 0 : (good / (good + neutral + bad)) * 100);
-
+	const [clicks, setClicks] = useState({ good: 0, neutral: 0, bad: 0 });
+	// handle clicks
+	const onGoodClick = () => setClicks({ ...clicks, good: clicks.good + 1 });
+	const onNeutralClick = () => setClicks({ ...clicks, neutral: clicks.neutral + 1 });
+	const onBadClick = () => setClicks({ ...clicks, bad: clicks.bad + 1 });
+	//Display
 	return (
 		<div>
 			<h2>give feedback</h2>
-			<Button onClick={() => setGood(good + 1)} text="good" />
-			<Button onClick={() => setNeutral(neutral + 1)} text="neutral" />
-			<Button onClick={() => setBad(bad + 1)} text="bad" />
+			<Button onClick={onGoodClick} text="good" />
+			<Button onClick={onNeutralClick} text="neutral" />
+			<Button onClick={onBadClick} text="bad" />
 			<h2>statistics</h2>
-			<Statistics
-				good={good}
-				bad={bad}
-				neutral={neutral}
-				avarage={avarage().toFixed(2)}
-				positive={positive().toFixed(2)}
-			/>
+			<Statistics clicks={clicks} />
 		</div>
 	);
 };
