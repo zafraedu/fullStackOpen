@@ -1,22 +1,36 @@
 import { useState } from "react";
 
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>;
-const StatisticLine = ({ text, value, per }) => (
-	<p>
-		{text}: {value} {per}
-	</p>
-);
+const StatisticLine = ({ text, value }) => {
+	if (text === "positive") {
+		return (
+			<tr>
+				<td>{text}:</td>
+				<td>{value}%</td>
+			</tr>
+		);
+	} else {
+		return (
+			<tr>
+				<td>{text}:</td>
+				<td>{value}</td>
+			</tr>
+		);
+	}
+};
 
 const Statistics = ({ good, bad, neutral, avarage, positive }) => {
 	if (good + bad + neutral > 0) {
 		return (
-			<>
-				<StatisticLine text="good" value={good} />
-				<StatisticLine text="neutral" value={neutral} />
-				<StatisticLine text="bad" value={bad} />
-				<StatisticLine text="avarage" value={avarage} />
-				<StatisticLine text="positive" value={positive} per="%" />
-			</>
+			<table>
+				<tbody>
+					<StatisticLine text="good" value={good} />
+					<StatisticLine text="neutral" value={neutral} />
+					<StatisticLine text="bad" value={bad} />
+					<StatisticLine text="avarage" value={avarage} />
+					<StatisticLine text="positive" value={positive} />
+				</tbody>
+			</table>
 		);
 	} else {
 		return <h4>No feedback given</h4>;
