@@ -1,24 +1,5 @@
-const TotalSum = ({ parts }) => {
-	const res = parts.reduce((prev, curr) => prev + curr.exercises, 0);
-	return <h3>total of {res} exercises</h3>;
-};
-const Part = ({ part }) => (
-	<p>
-		{part.name} {part.exercises}
-	</p>
-);
-const Content = ({ parts }) => parts.map((e) => <Part key={e.id} part={e} />);
-const Header = ({ name }) => <h2>{name}</h2>;
-const Course = ({ course }) => {
-	return (
-		<>
-			<Header name={course.name} />
-			<Content parts={course.parts} />
-			<TotalSum parts={course.parts} />
-		</>
-	);
-};
-const AllCourses = ({ allCourses }) => allCourses.map((e) => <Course key={e.id} course={e} />);
+import Course from "./components/Course";
+
 const App = () => {
 	const courses = [
 		{
@@ -68,7 +49,9 @@ const App = () => {
 	return (
 		<div>
 			<h1>Web development curriculum</h1>
-			<AllCourses allCourses={courses} />
+			{courses.map((e) => (
+				<Course key={e.id} course={e} />
+			))}
 		</div>
 	);
 };
