@@ -1,4 +1,13 @@
-const Part = ({ part }) => <p>{part.name} {part.exercises}</p>;
+const TotalSum = (props) => {
+	console.log(props);
+	let sumEJe = 0;
+	props.parts.forEach((e) => {
+		sumEJe += e.exercises;
+	});
+	return <h3>total of {sumEJe} exercises</h3>;
+};
+
+const Part = ({ part }) => <p>{part.name} {part.exercises}</p>
 const Content = ({ parts }) => parts.map((e) => <Part key={e.id} part={e} />);
 const Header = () => <h1>Header</h1>;
 
@@ -7,6 +16,7 @@ const Course = ({ course }) => {
 		<>
 			<Header />
 			<Content parts={course.parts} />
+			<TotalSum parts={course.parts} />
 		</>
 	);
 };
