@@ -1,10 +1,7 @@
-const TotalSum = (props) => {
-	console.log(props);
-	let sumEJe = 0;
-	props.parts.forEach((e) => {
-		sumEJe += e.exercises;
-	});
-	return <h3>total of {sumEJe} exercises</h3>;
+const TotalSum = ({ parts }) => {
+	console.log(parts);
+	const res = parts.reduce((prev, curr) => prev + curr.exercises, 0);
+	return <h3>total of {res} exercises</h3>;
 };
 
 const Part = ({ part }) => <p>{part.name} {part.exercises}</p>
