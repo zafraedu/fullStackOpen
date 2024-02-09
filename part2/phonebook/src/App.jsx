@@ -1,7 +1,6 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 const H2 = ({ text }) => <h2>{text}</h2>;
-
 const List = ({ name, number }) => (
 	<li>
 		{name} {number}
@@ -16,30 +15,37 @@ const App = () => {
 		{ name: "Mary Poppendieck", number: "39-23-6423122", id: 4 },
 	]);
 	const [newName, setNewName] = useState("");
-	const [newNumber, setnewNumber] = useState("");
+	const [newNumber, setNewNumber] = useState("");
+	const [filter, setFilter] = useState("");
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		const objPerso = {
-			name: newName,
-			number: newNumber,
-			id: persons.length + 1,
-		};
+		if (!newName.trim()) return;
 
-		const names = persons.map((e) => e.name);
-		names.indexOf(newName) !== -1
-			? alert(`${newName} is already added to phonebook`)
-			: setPersons(persons.concat(objPerso));
+		if (persons.find((person) => person.name === newName)) {
+			alert(`${newName} is already added to phonebook`);
+			setNewName("");
+			return;
+		}
+		setPersons([...persons, { name: newName, number: newNumber, id: persons.length + 1 }]);
 		setNewName("");
-		setnewNumber("");
+		setNewNumber("");
 	};
 
 	const handleName = (event) => setNewName(event.target.value);
-	const handleNum = (event) => setnewNumber(event.target.value);
+	const handleNum = (event) => setNewNumber(event.target.value);
+	const handleFilter = (event) => setFilter(event.target.value);
+
+	const filteredPersons = persons.filter((person) => {
+		return person.name.toLowerCase().includes(filter.toLowerCase());
+	});
 
 	return (
 		<>
 			<H2 text="Phonebook" />
+			<div>
+				filter shown with <input id="filter" onChange={handleFilter} value={filter} />
+			</div>
 			<H2 text="add a new" />
 			<form>
 				<div>
@@ -56,7 +62,7 @@ const App = () => {
 			</form>
 			<H2 text="Numbers" />
 			<ul>
-				{persons.map((e) => (
+				{filteredPersons.map((e) => (
 					<List key={e.id} name={e.name} number={e.number} />
 				))}
 			</ul>
