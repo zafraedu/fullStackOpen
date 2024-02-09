@@ -1,11 +1,7 @@
-import React, { useState } from "react";
-
-const H2 = ({ text }) => <h2>{text}</h2>;
-const List = ({ name, number }) => (
-	<li>
-		{name} {number}
-	</li>
-);
+import { useState } from "react";
+import { H2 } from "./components/Header.jsx";
+import List from "./components/List.jsx";
+import Form, { InputChange } from "./components/Form.jsx";
 
 const App = () => {
 	const [persons, setPersons] = useState([
@@ -43,29 +39,17 @@ const App = () => {
 	return (
 		<>
 			<H2 text="Phonebook" />
-			<div>
-				filter shown with <input id="filter" onChange={handleFilter} value={filter} />
-			</div>
+			<InputChange textLabel="filter shown with " type="text" value={filter} event={handleFilter} id="filter" />
 			<H2 text="add a new" />
-			<form>
-				<div>
-					name: <input id="n-me" onChange={handleName} value={newName} />
-				</div>
-				<div>
-					number: <input id="number" onChange={handleNum} value={newNumber} />
-				</div>
-				<div>
-					<button id="btnSubmit" onClick={handleSubmit} type="submit">
-						add
-					</button>
-				</div>
-			</form>
+			<Form
+				newName={newName}
+				handleName={handleName}
+				newNumber={newNumber}
+				handleNum={handleNum}
+				handleSubmit={handleSubmit}
+			/>
 			<H2 text="Numbers" />
-			<ul>
-				{filteredPersons.map((e) => (
-					<List key={e.id} name={e.name} number={e.number} />
-				))}
-			</ul>
+			<List filteredPersons={filteredPersons} />
 		</>
 	);
 };
