@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { H2 } from "./components/Header.jsx";
-import List from "./components/List.jsx";
+import Table from "./components/List.jsx";
 import Form, { InputChange } from "./components/Form.jsx";
 
 const App = () => {
@@ -11,25 +11,24 @@ const App = () => {
 	const [filter, setFilter] = useState("");
 
 	useEffect(() => {
-		axios
-			.get("http://localhost:3001/persons")
-			.then((response) => {
-				setPersons(response.data);
-			});
+		axios.get("http://localhost:3001/persons").then((response) => {
+			setPersons(response.data);
+		});
 	}, []);
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		if (!newName.trim()) return;
+		if (!newName.trim() || !newNumber.trim()) return;
 
 		if (persons.find((person) => person.name === newName)) {
 			alert(`${newName} is already added to phonebook`);
-			setNewName("");
 			return;
 		}
-		setPersons([...persons, { name: newName, number: newNumber, id: persons.length + 1 }]);
-		setNewName("");
-		setNewNumber("");
+		axios.post("http://localhost:3001/persons", { name: newName, number: newNumber }).then((response) => {
+			setPersons([...persons, response.data]);
+			setNewName("");
+			setNewNumber("");
+		});
 	};
 
 	const handleName = (event) => setNewName(event.target.value);
@@ -53,7 +52,7 @@ const App = () => {
 				handleSubmit={handleSubmit}
 			/>
 			<H2 text="Numbers" />
-			<List filteredPersons={filteredPersons} />
+			<Table filteredPersons={filteredPersons} />
 		</>
 	);
 };
