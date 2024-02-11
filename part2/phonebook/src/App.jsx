@@ -33,6 +33,12 @@ const App = () => {
 		});
 	};
 
+	const deletePerson = (id) => () => {
+		const person = persons.find((e) => e.id === id);
+		personService.del(person.id);
+		setPersons(persons.filter((e) => e.id !== id));
+	};
+
 	const filteredPersons = persons.filter((person) => {
 		return person.name.toLowerCase().includes(filter.toLowerCase());
 	});
@@ -50,7 +56,7 @@ const App = () => {
 				handleSubmit={handleSubmit}
 			/>
 			<H2 text="Numbers" />
-			<Table filteredPersons={filteredPersons} />
+			<Table filteredPersons={filteredPersons} deletePerson={deletePerson} />
 		</>
 	);
 };

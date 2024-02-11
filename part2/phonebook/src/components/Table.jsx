@@ -1,25 +1,12 @@
-const Li = ({ name, number }) => (
-	<li>
-		{name} {number}
-	</li>
-);
-
-const List = ({ filteredPersons }) => (
-	<ul>
-		{filteredPersons.map((e) => (
-			<Li key={e.id} name={e.name} number={e.number} />
-		))}
-	</ul>
-);
-
-const ElementTable = ({ id, name, number }) => (
+const ElementTable = ({ name, number, deletePerson }) => (
 	<>
 		<td>{name}</td>
 		<td>{number}</td>
+		<td><button onClick={deletePerson}>delete</button></td>
 	</>
 );
 
-const Table = ({ filteredPersons }) => {
+const Table = ({ filteredPersons, deletePerson }) => {
 	return (
 		<table>
 			<thead>
@@ -31,7 +18,7 @@ const Table = ({ filteredPersons }) => {
 			<tbody>
 				{filteredPersons.map((e) => (
 					<tr key={e.id}>
-						<ElementTable name={e.name} number={e.number} />
+						<ElementTable deletePerson={deletePerson(e.id)} name={e.name} number={e.number} />
 					</tr>
 				))}
 			</tbody>
