@@ -1,8 +1,8 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { H2 } from "./components/Header.jsx";
-import Table from "./components/List.jsx";
+import Table from "./components/Table.jsx";
 import Form, { InputChange } from "./components/Form.jsx";
+import personService from "./services/person.js";
 
 const App = () => {
 	const [persons, setPersons] = useState([]);
@@ -11,10 +11,12 @@ const App = () => {
 	const [filter, setFilter] = useState("");
 
 	useEffect(() => {
-		axios.get("http://localhost:3001/persons").then((response) => {
-			setPersons(response.data);
-		});
+		personService.getAll().then((initPersons) => setPersons(initPersons));
 	}, []);
+
+	const handleName = (event) => setNewName(event.target.value);
+	const handleNum = (event) => setNewNumber(event.target.value);
+	const handleFilter = (event) => setFilter(event.target.value);
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -24,16 +26,12 @@ const App = () => {
 			alert(`${newName} is already added to phonebook`);
 			return;
 		}
-		axios.post("http://localhost:3001/persons", { name: newName, number: newNumber }).then((response) => {
-			setPersons([...persons, response.data]);
+		personService.create({ name: newName, number: newNumber }).then((returnedPerson) => {
+			setPersons([...persons, returnedPerson]);
 			setNewName("");
 			setNewNumber("");
 		});
 	};
-
-	const handleName = (event) => setNewName(event.target.value);
-	const handleNum = (event) => setNewNumber(event.target.value);
-	const handleFilter = (event) => setFilter(event.target.value);
 
 	const filteredPersons = persons.filter((person) => {
 		return person.name.toLowerCase().includes(filter.toLowerCase());
