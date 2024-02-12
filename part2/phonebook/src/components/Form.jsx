@@ -19,7 +19,7 @@ const Form = (props) => {
 	return (
 		<form>
 			<InputChange textLabel="name: " type="text" value={props.newName} event={props.handleName} id="n-me" />
-			<InputChange textLabel="nuber: " type="text" value={props.newNumber} event={props.handleNum} id="number" />
+			<InputChange textLabel="number: " type="text" value={props.newNumber} event={props.handleNum} id="number" />
 			<InputSubmit id="btnSubmit" event={props.handleSubmit} type="submit" />
 		</form>
 	);
