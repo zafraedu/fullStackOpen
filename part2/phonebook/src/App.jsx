@@ -20,23 +20,35 @@ const App = () => {
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		if (!newName.trim() || !newNumber.trim()) return;
-
-		if (persons.find((person) => person.name === newName)) {
-			alert(`${newName} is already added to phonebook`);
+		if (!newName.trim() || !newNumber.trim()) {
+			alert("empty field");
 			return;
 		}
-		personService.create({ name: newName, number: newNumber }).then((returnedPerson) => {
-			setPersons([...persons, returnedPerson]);
-			setNewName("");
-			setNewNumber("");
-		});
+
+		const findPerson = persons.find((person) => person.name === newName);
+		if (!findPerson) {
+			personService.create({ name: newName, number: newNumber }).then((returnedPerson) => {
+				setPersons([...persons, returnedPerson]);
+				setNewName("");
+				setNewNumber("");
+			});
+		} else {
+			if (confirm(`${findPerson.name} is already added to phonebook, replace the old number with a new one ?`)) {
+				personService.update(findPerson.id, { ...findPerson, number: newNumber }).then((rPerson) => {
+					setPersons(persons.map((person) => (person.id !== rPerson.id ? person : rPerson)));
+					setNewName("");
+					setNewNumber("");
+				});
+			}
+		}
 	};
 
 	const deletePerson = (id) => () => {
 		const person = persons.find((e) => e.id === id);
-		personService.del(person.id);
-		setPersons(persons.filter((e) => e.id !== id));
+		if (confirm(`delete ${person.name} ?`)) {
+			personService.del(person.id);
+			setPersons(persons.filter((e) => e.id !== id));
+		}
 	};
 
 	const filteredPersons = persons.filter((person) => {
