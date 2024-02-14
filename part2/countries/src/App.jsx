@@ -19,6 +19,7 @@ function App() {
 		});
 	}, []);
 
+  const handleShow = (name) => () => setFilter(name);
 	const handleFilter = ({ target: { value } }) => setFilter(value);
 
 	const filterCountries = countries.filter((e) => {
@@ -38,7 +39,9 @@ function App() {
 			<input type="text" onChange={handleFilter} value={filter} id="filter" />
 			{!message ? "" : <p>{message}</p>}
 			{displayFiltered.map((e) => (
-				<div key={e.name}>{e.name}</div>
+				<div key={e.name}>
+					{e.name} <button onClick={handleShow(e.name)}>show</button>
+				</div>
 			))}
 			{filterCountries.length === 1 && <CompleteCountrie {...filterCountries[0]} />}
 		</>
