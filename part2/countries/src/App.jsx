@@ -1,12 +1,13 @@
+import { useEffect, useState } from "react";
 import countryService from "./services/country";
-import { useState } from "react";
-import CompleteCountrie from "./components/CompleteCountrie";
+import Filter from "./components/Filter";
+import Countries from "./components/Countries";
 
 function App() {
-	const [countries, setCountries] = useState([]);
+	const [allCountries, setAllCountries] = useState([]);
 	const [filter, setFilter] = useState("");
 
-	useState(() => {
+	useEffect(() => {
 		countryService.getAll().then((initAllCountries) => {
 			const countrieData = initAllCountries.map((element) => ({
 				name: element.name.common,
@@ -15,35 +16,16 @@ function App() {
 				capital: element.capital,
 				area: element.area,
 			}));
-			setCountries(countrieData);
+			setAllCountries(countrieData);
 		});
 	}, []);
 
-  const handleShow = (name) => () => setFilter(name);
 	const handleFilter = ({ target: { value } }) => setFilter(value);
-
-	const filterCountries = countries.filter((e) => {
-		return e.name.toLowerCase().includes(filter.toLowerCase());
-	});
-
-	let displayFiltered = filterCountries;
-	let message = "";
-	if (filterCountries.length > 10) {
-		displayFiltered = [];
-		message = filter.length === 0 ? "" : "Too many matches, specify another filter";
-	} else if (filterCountries.length === 1) displayFiltered = [];
 
 	return (
 		<>
-			<label htmlFor="filter"> find countries </label>
-			<input type="text" onChange={handleFilter} value={filter} id="filter" />
-			{!message ? "" : <p>{message}</p>}
-			{displayFiltered.map((e) => (
-				<div key={e.name}>
-					{e.name} <button onClick={handleShow(e.name)}>show</button>
-				</div>
-			))}
-			{filterCountries.length === 1 && <CompleteCountrie {...filterCountries[0]} />}
+			<Filter handleFilter={handleFilter} filter={filter} />
+			<Countries filter={filter} allCountries={allCountries} setFilter={setFilter} />
 		</>
 	);
 }
