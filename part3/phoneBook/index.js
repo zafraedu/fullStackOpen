@@ -29,6 +29,15 @@ app.get("/api/persons", (request, response) => {
 	console.log(persons);
 });
 
+app.get("/info", (request, response) => {
+	response.send(
+		`
+		<p>Phonebook has info for ${persons.length} people</p>
+		<p>${new Date()}</p>
+		`
+	);
+});
+
 const PORT = 3001;
 app.listen(PORT);
-console.log(`Server running on port http://localhost:${PORT}/api/persons`);
+console.log(`Server running on port http://localhost:${PORT}/`);
