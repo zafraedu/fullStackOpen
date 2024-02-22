@@ -2,8 +2,14 @@ const express = require("express");
 const morgan = require("morgan");
 const app = express();
 
+app.use(morgan(":method :url :status :res[content-length] - :response-time ms :body"));
 app.use(express.json());
-app.use(morgan("tiny"));
+
+morgan.token("body", (req) => (
+	req.method === "POST" && req.body.name && req.body.number
+	? JSON.stringify(req.body)
+	: null
+));
 
 let persons = [
 	{
@@ -80,4 +86,4 @@ app.get("/info", (request, response) => {
 
 const PORT = 3001;
 app.listen(PORT);
-console.log(`Server running on port http://localhost:${PORT}/`);
+console.log(`Server running on port http://localhost:${PORT}/api/persons\n`);
